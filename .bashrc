@@ -19,8 +19,8 @@ match_lhs=""
 
 PS1='\[\033]0;\u@\h\007\]'
 
-if [ "$TERM" = "dumb" ]; then
-    # Emacs M-x shell uses dumb terminal, and it can handle colors.
+if [ "$TERM" = "dumb" -o "$TERM" = "eterm-color" ]; then
+    # Emacs M-x shell uses dumb terminal, and it can handle colors. (Also M-x term)
     use_color=true
     PS1=''
 fi
@@ -65,8 +65,10 @@ unset use_color safe_term match_lhs
 # End: Color settings
 #
 
-[ -x /Applications/Emacs.app/contents/MacOS/Emacs ] && \
-    alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+if [ ! -x /usr/local/bin/emacs ]; then
+    [ -x /Applications/Emacs.app/contents/MacOS/Emacs ] && \
+        alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
+fi
 
 [ -x '/Applications/Adobe Reader.app/Contents/MacOS/AdobeReader' ] && \
     alias acroread='/Applications/Adobe\ Reader.app/Contents/MacOS/AdobeReader'
@@ -92,12 +94,6 @@ if [ -n "$mvim" ]; then
 fi
 unset mvim
 
-if which triton >&/dev/null; then
-    profile=$(triton profile ls -H -o name,curr | awk '$2 == "*" { print $1 }')
-    eval "$(triton env -t -s "$profile")"
-    unset profile
-fi
-
 if which mls >&/dev/null; then
     export MANTA_URL=https://us-east.manta.joyent.com
     export MANTA_USER=csk
@@ -107,4 +103,45 @@ fi
 
 export RUST_SRC_PATH=$HOME/src/rustc-1.7.0/src
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+export HOMEBREW_GITHUB_API_TOKEN="b888931bb7a1857d61cbb6cc968d9ba79b8d67d0"
+
+if which terraform >&/dev/null; then
+    alias tf=terraform
+fi
+
+# If any of c, p, or d are renamed, do update .emacs.d/init/_shell.el too
+alias c=pushd
+alias p=popd
+alias d='dirs -v'
+
+if [ -x "$HOME/src/snippets/vless" ]; then
+    alias vless="$HOME/src/snippets/vless"
+fi
+
+# Triton setting
+
+if which triton >&/dev/null; then
+    profile=$(triton profile ls -H -o name,curr | awk '$2 == "*" { print $1 }')
+    eval "$(triton env -t -s "$profile")"
+    unset profile
+fi
+
+# Triton Docker setting
+if [ -z "$TRITON_PROFILE" -a -x $(which triton) ]; then
+    # TODO: better to get profile via `triton profile get` instead of
+    # 'us-east-1'
+    eval "$(triton env --triton --docker --smartdc us-east-1)"
+fi
+
+alias t=triton
+tenv() {
+  triton env "$@" && eval "$(triton env "$@")"
+}
+
+# Manta setting
+export MANTA_URL=https://us-east.manta.joyent.com
+export MANTA_USER=csk
+unset MANTA_SUBUSER # Unless you have subusers
+export MANTA_KEY_ID=$(ssh-keygen -l -f $HOME/.ssh/id_rsa.pub | awk '{print $2}')
+
+
