@@ -1,13 +1,13 @@
 
 export LC_MESSAGES=C LC_TIME=C
 
-export GOPATH=$HOME/.go
+export GOPATH=$HOME/src/go
 export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH:$GOPATH/bin:$HOME/bin"
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
-if [ -d "/Applications/Racket v6.2" ]; then
-    export PATH="/Applications/Racket v6.2/bin:$PATH"
-    export MANPATH="/Applications/Racket v6.2/man:$MANPATH"
+if [ -d "/Applications/Racket v6.10" ]; then
+    export PATH="/Applications/Racket v6.10/bin:$PATH"
+    export MANPATH="/Applications/Racket v6.10/man:$MANPATH"
 fi
 
 if [ -d "/Applications/Emacs.app/Contents/MacOS/bin" ]; then

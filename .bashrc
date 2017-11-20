@@ -73,12 +73,12 @@ unset use_color safe_term match_lhs
 
 [ -x $HOME/bin/mvn.sh ] && alias mvn="$HOME/bin/mvn.sh"
 
-if which pyenv >&/dev/null; then
-    eval "$(pyenv init -)"
-    if which pyenv-virtualenv >&/dev/null; then
-        eval "$(pyenv virtualenv-init -)"
-    fi
-fi
+#if which pyenv >&/dev/null; then
+#    eval "$(pyenv init -)"
+#    if which pyenv-virtualenv >&/dev/null; then
+#        eval "$(pyenv virtualenv-init -)"
+#    fi
+#fi
 
 # https://coderwall.com/p/xdox9a/running-ipython-cleanly-inside-a-virtualenv
 alias ipy="python -c 'import IPython;IPython.terminal.ipapp.launch_new_instance()'"
@@ -92,6 +92,19 @@ if [ -n "$mvim" ]; then
 fi
 unset mvim
 
-    
+if which triton >&/dev/null; then
+    profile=$(triton profile ls -H -o name,curr | awk '$2 == "*" { print $1 }')
+    eval "$(triton env -t -s "$profile")"
+    unset profile
+fi
+
+if which mls >&/dev/null; then
+    export MANTA_URL=https://us-east.manta.joyent.com
+    export MANTA_USER=csk
+    unset MANTA_SUBUSER # Unless you have subusers
+    export MANTA_KEY_ID=$(ssh-keygen -l -f $HOME/.ssh/id_rsa.pub | awk '{print $2}')
+fi
+
+export RUST_SRC_PATH=$HOME/src/rustc-1.7.0/src
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
