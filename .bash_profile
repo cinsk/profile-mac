@@ -9,13 +9,17 @@ fi
 
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
-if [ -d "/Applications/Racket v6.10" ]; then
-    export PATH="/Applications/Racket v6.10/bin:$PATH"
-    export MANPATH="/Applications/Racket v6.10/man:$MANPATH"
+if [ -d "/Applications/Racket v6.2" ]; then
+    export PATH="/Applications/Racket v6.2/bin:$PATH"
+    export MANPATH="/Applications/Racket v6.2/man:$MANPATH"
 fi
 
 if [ -d "/Applications/Emacs.app/Contents/MacOS/bin" ]; then
     export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
+fi
+
+if [ -d "/Applications/Aquamacs.app/Contents/MacOS/bin" ]; then
+    export PATH="/Applications/Aquamacs.app/Contents/MacOS/bin:$PATH"
 fi
 
 if [ -z "$JAVA_HOME" -a -x "/usr/libexec/java_home" ]; then
@@ -37,5 +41,5 @@ export FDK_EXE
 # runs your .bashrc and is recommended by the bash info pages.
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
